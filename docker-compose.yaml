@@ -1,0 +1,27 @@
+name: triton
+
+services:
+  triton:
+    hostname: triton
+    container_name: triton
+    image: nvcr.io/nvidia/tritonserver:24.06-py3
+    entrypoint: tritonserver --model-repository=/models --log-verbose=1
+    ports:
+      - 127.0.0.1:8000:8000
+      - 127.0.0.1:8001:8001
+      - 127.0.0.1:8002:8002
+    volumes:
+      - ./models:/models
+    networks:
+      - default
+  
+  sdk:
+    container_name: sdk
+    hostname: sdk
+    image: nvcr.io/nvidia/tritonserver:24.06-py3-sdk
+    entrypoint: tail -f > /dev/null
+    networks:
+      - default
+
+networks:
+  default:
